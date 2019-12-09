@@ -53,16 +53,10 @@ const drawRectangle = function() {
     let ctx = document.getElementById('student-canvas-2')
     let context = ctx.getContext('2d');
     context.clearRect(0, 0, ctx.width, ctx.height);
-    let width = prompt("Width:");
-    let height = prompt("Height:");
-    let x = prompt("X:");
-    let y = prompt("Y:");
-
-    width = Number(width);
-    height = Number(height);
-    x = Number(x);
-    y = Number(y);
-
+    let width;
+    let height;
+    let x;
+    let y;
     const canvas_width = 1024;
     const canvas_height = 512;
 
@@ -71,15 +65,30 @@ const drawRectangle = function() {
         height = prompt("Height:");
         x = prompt("X:");
         y = prompt("Y:");
-        width = Number(width);
-        height = Number(height);
-        x = Number(x);
-        y = Number(y);
+
+        while (width == null || height == null || x == null || y == null) {
+          context.clearRect(0, 0, ctx.width, ctx.height);
+          break;
+        }
+        if (Number.isNaN(width) || Number.isNaN(height) || Number.isNaN(x) || Number.isNaN(y)) {
+          alert("One of your values is not a number.");
+        }
+
+        else {
+          width = Number(width);
+          height = Number(height);
+          x = Number(x);
+          y = Number(y);
+        }
     }
+
+    promptDimensions();
+
     //need to fix how to stop the code
     while (width >= canvas_width || width < 1) {
         alert("Your width must be between 1 and 1024.");
         promptDimensions();
+
     }
     while (height >= canvas_height || height < 1) {
         alert("Your height must be between 1 and 512.");
@@ -97,7 +106,7 @@ const drawRectangle = function() {
         alert("Your rectangle won't fit on the canvas.");
         promptDimensions();
     }
-    
+
     context.strokeRect(x, y, width, height);
 
 };
@@ -122,7 +131,7 @@ const drawColoredRectangle = function() {
     }
     context.fillStyle = color;
     context.fillRect(10, 10, 100, 50);
-    
+
 };
 
 /*
