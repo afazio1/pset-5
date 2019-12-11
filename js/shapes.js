@@ -21,6 +21,7 @@ window.onload = function() {
     document.getElementById("hello").onclick = sayHello;
     document.getElementById("rectangle").onclick = drawRectangle;
     document.getElementById("colored-rectangle").onclick = drawColoredRectangle;
+    document.getElementById("triangle").onclick = drawTriangle;
 }
 
 /*
@@ -48,8 +49,7 @@ const sayHello = function() {
  */
 
 const drawRectangle = function() {
-    // write your exercise 2 code here
-
+    
     let ctx = document.getElementById('student-canvas-2')
     let context = ctx.getContext('2d');
     context.clearRect(0, 0, ctx.width, ctx.height);
@@ -57,20 +57,25 @@ const drawRectangle = function() {
     let height;
     let x;
     let y;
+    let flag = 0;
     const canvas_width = 1024;
     const canvas_height = 512;
 
+
     function promptDimensions() {
+        console.log("in func");
         width = prompt("Width:");
         height = prompt("Height:");
         x = prompt("X:");
         y = prompt("Y:");
 
-        while (width == null || height == null || x == null || y == null) {
+        if (width == null || height == null || x == null || y == null) {
           context.clearRect(0, 0, ctx.width, ctx.height);
-          break;
+          flag = 1;
+          
+          
         }
-        if (Number.isNaN(width) || Number.isNaN(height) || Number.isNaN(x) || Number.isNaN(y)) {
+        else if (Number.isNaN(width) || Number.isNaN(height) || Number.isNaN(x) || Number.isNaN(y)) {
           alert("One of your values is not a number.");
         }
 
@@ -81,34 +86,32 @@ const drawRectangle = function() {
           y = Number(y);
         }
     }
-
+    
     promptDimensions();
-
-    //need to fix how to stop the code
-    while (width >= canvas_width || width < 1) {
+    
+    while ((width >= canvas_width || width < 1) && flag === 0) {
         alert("Your width must be between 1 and 1024.");
         promptDimensions();
-
     }
-    while (height >= canvas_height || height < 1) {
+    while ((height >= canvas_height || height < 1) && flag === 0) {
         alert("Your height must be between 1 and 512.");
         promptDimensions();
     }
-    while (x >= canvas_width || x < 1) {
+    while ((x >= canvas_width || x < 1 ) && flag === 0) {
         alert("Your x-coordinate must be between 1 and 1024.");
         promptDimensions();
     }
-    while (y >= canvas_height || y < 1) {
+    while ((y >= canvas_height || y < 1) && flag === 0) {
         alert("Your x-coordinate must be between 1 and 512.");
         promptDimensions();
     }
-    while (x + width > canvas_width || y + height > canvas_height) {
+    while ((x + width > canvas_width || y + height > canvas_height) && flag === 0) {
         alert("Your rectangle won't fit on the canvas.");
         promptDimensions();
     }
 
     context.strokeRect(x, y, width, height);
-
+    
 };
 
 /*
@@ -116,21 +119,40 @@ const drawRectangle = function() {
  */
 
 const drawColoredRectangle = function() {
-    // write your exercise 3 code here
+    
     let ctx = document.getElementById('student-canvas-3')
     let context = ctx.getContext('2d');
-    context.clearRect(0, 0, ctx.width, ctx.height);
+
     let color = prompt("Pick a color.");
-    color = String(color);
-    color = color.toLowerCase();
-    while (color != "black" && color != "blue" && color != "green" && color != "orange" && color != "purple" && color != "red" && color != "yellow") {
-        alert("This is an unsupported color.");
-        color = prompt("Pick a color.");
+    let flag = 0;
+    context.clearRect(0, 0, ctx.width, ctx.height);
+    
+
+    if (color === null) {
+        flag = 1;
+        context.clearRect(0, 0, ctx.width, ctx.height);  
+    }
+    else {
         color = String(color);
         color = color.toLowerCase();
     }
-    context.fillStyle = color;
-    context.fillRect(10, 10, 100, 50);
+    while (color != "black" && color != "blue" && color != "green" && color != "orange" && color != "purple" && color != "red" && color != "yellow" && flag === 0) {
+        alert("This is an unsupported color.");
+        color = prompt("Pick a color.");
+
+        if (color === null) {
+            flag = 1;
+            context.clearRect(0, 0, ctx.width, ctx.height);
+        }
+        else {
+            color = String(color);
+            color = color.toLowerCase();
+        }
+    }
+    if (flag === 0) {
+        context.fillStyle = color;
+        context.fillRect(10, 10, 100, 50);
+    }
 
 };
 
@@ -139,7 +161,99 @@ const drawColoredRectangle = function() {
  */
 
 const drawTriangle = function() {
-    // write your exercise 4 code here
+
+    let ctx = document.getElementById('student-canvas-4');
+    let context = ctx.getContext('2d');
+    context.clearRect(0, 0, ctx.width, ctx.height);
+    
+    let flag = 0;
+    let base;
+    let height;
+    let diagonal;
+    let side1;
+    let side2;
+    let side3;
+
+
+    function promptDimensions() {
+        side1 = prompt("Side 1:");
+        side2 = prompt("Side 2:");
+        side3 = prompt("Side 3:");
+
+        if (side1 === null || side2 === null || side3 === null) {
+                flag = 1;
+                context.clearRect(0, 0, ctx.width, ctx.height);
+            }
+        side1 = Number(side1);
+        side2 = Number(side2);
+        side3 = Number(side3);
+
+        while ((Number.isNaN(side1) || Number.isNaN(side2) || Number.isNaN(side3)) && flag === 0) {
+            flag = 1;
+            alert("One of your sides is not a number.");
+            side1 = prompt("Side 1:");
+            side2 = prompt("Side 2:");
+            side3 = prompt("Side 3:");
+            side1 = Number(side1);
+            side2 = Number(side2);
+            side3 = Number(side3);
+        } 
+
+        diagonal = Math.max(side1, side2, side3);
+        height = Math.min(side1, side2, side3);   
+
+        if (diagonal === side1) {
+            if (height === side2) {
+                base = side3;
+            }
+            else {
+                base = side2;
+            }
+        }
+        else if (diagonal === side2) {
+            if (height === side1) {
+                base = side3;
+            }
+            else {
+                base = side1;
+            }
+        }
+        else {
+            if (height === side1) {
+                base = side2;
+            }
+            else {
+                base = side1;
+            }
+        }      
+    }
+
+    promptDimensions();
+
+    if (Math.hypot(height, base) === diagonal) {
+
+        let x = height + 25;
+        let y = 25 + base;
+
+        context.beginPath();
+        context.moveTo(25, x);
+        context.lineTo(y, x);
+        context.lineTo(25, 25);
+        context.lineTo(25, x);
+        context.stroke();
+    }
+    while (Math.hypot(height, base) !== diagonal && flag === 0){
+        alert("That's not a valid right triangle.");
+        promptDimensions();
+        
+    }
+    console.log(ctx.width);    
+    while (base + 25 >= ctx.width || height + 25 >= ctx.height && flag === 0) {
+        alert("Your triangle won't fit on the canvas.");
+        promptDimensions();
+        console.log(height + 25);
+        console.log(base + 25);
+    }
 };
 
 /*
@@ -148,6 +262,7 @@ const drawTriangle = function() {
 
 const drawFace = function() {
     // write your exercise 4 code here
+
 };
 
 /*
