@@ -22,6 +22,7 @@ window.onload = function() {
     document.getElementById("rectangle").onclick = drawRectangle;
     document.getElementById("colored-rectangle").onclick = drawColoredRectangle;
     document.getElementById("triangle").onclick = drawTriangle;
+    document.getElementById("smile").onlcick = drawFace;
 }
 
 /*
@@ -32,7 +33,7 @@ const sayHello = function() {
     let ctx = document.getElementById('student-canvas-1')
     let context = ctx.getContext('2d');
     let text = prompt("Message:");
-
+//needs to continually ask
   context.clearRect(0, 0, ctx.width, ctx.height);
   if (text.length <= 50 && text.length >= 1) {
     context.font = "48px sans-serif";
@@ -49,7 +50,7 @@ const sayHello = function() {
  */
 
 const drawRectangle = function() {
-    
+
     let ctx = document.getElementById('student-canvas-2')
     let context = ctx.getContext('2d');
     context.clearRect(0, 0, ctx.width, ctx.height);
@@ -72,8 +73,8 @@ const drawRectangle = function() {
         if (width == null || height == null || x == null || y == null) {
           context.clearRect(0, 0, ctx.width, ctx.height);
           flag = 1;
-          
-          
+
+
         }
         else if (Number.isNaN(width) || Number.isNaN(height) || Number.isNaN(x) || Number.isNaN(y)) {
           alert("One of your values is not a number.");
@@ -86,9 +87,9 @@ const drawRectangle = function() {
           y = Number(y);
         }
     }
-    
+
     promptDimensions();
-    
+
     while ((width >= canvas_width || width < 1) && flag === 0) {
         alert("Your width must be between 1 and 1024.");
         promptDimensions();
@@ -111,7 +112,7 @@ const drawRectangle = function() {
     }
 
     context.strokeRect(x, y, width, height);
-    
+
 };
 
 /*
@@ -119,18 +120,18 @@ const drawRectangle = function() {
  */
 
 const drawColoredRectangle = function() {
-    
+
     let ctx = document.getElementById('student-canvas-3')
     let context = ctx.getContext('2d');
 
     let color = prompt("Pick a color.");
     let flag = 0;
     context.clearRect(0, 0, ctx.width, ctx.height);
-    
+
 
     if (color === null) {
         flag = 1;
-        context.clearRect(0, 0, ctx.width, ctx.height);  
+        context.clearRect(0, 0, ctx.width, ctx.height);
     }
     else {
         color = String(color);
@@ -165,7 +166,7 @@ const drawTriangle = function() {
     let ctx = document.getElementById('student-canvas-4');
     let context = ctx.getContext('2d');
     context.clearRect(0, 0, ctx.width, ctx.height);
-    
+
     let flag = 0;
     let base;
     let height;
@@ -197,10 +198,10 @@ const drawTriangle = function() {
             side1 = Number(side1);
             side2 = Number(side2);
             side3 = Number(side3);
-        } 
+        }
 
         diagonal = Math.max(side1, side2, side3);
-        height = Math.min(side1, side2, side3);   
+        height = Math.min(side1, side2, side3);
 
         if (diagonal === side1) {
             if (height === side2) {
@@ -225,7 +226,7 @@ const drawTriangle = function() {
             else {
                 base = side1;
             }
-        }      
+        }
     }
 
     promptDimensions();
@@ -245,9 +246,9 @@ const drawTriangle = function() {
     while (Math.hypot(height, base) !== diagonal && flag === 0){
         alert("That's not a valid right triangle.");
         promptDimensions();
-        
+
     }
-    console.log(ctx.width);    
+    console.log(ctx.width);
     while (base + 25 >= ctx.width || height + 25 >= ctx.height && flag === 0) {
         alert("Your triangle won't fit on the canvas.");
         promptDimensions();
