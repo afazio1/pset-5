@@ -22,7 +22,8 @@ window.onload = function() {
     document.getElementById("rectangle").onclick = drawRectangle;
     document.getElementById("colored-rectangle").onclick = drawColoredRectangle;
     document.getElementById("triangle").onclick = drawTriangle;
-    document.getElementById("smile").onlcick = drawFace;
+    document.getElementById("smile").onclick = drawFace;
+    document.getElementById("pyramid").onclick = drawPyramid;
 }
 
 /*
@@ -33,16 +34,29 @@ const sayHello = function() {
     let ctx = document.getElementById('student-canvas-1')
     let context = ctx.getContext('2d');
     let text = prompt("Message:");
+    let flag;
 //needs to continually ask
-  context.clearRect(0, 0, ctx.width, ctx.height);
-  if (text.length <= 50 && text.length >= 1) {
-    context.font = "48px sans-serif";
-    context.strokeText(text, 30, 70, 994);
-  }
-  else {
-    alert("Your message is too long. Keep it under 50 characters.");
-    let text = prompt("Message: ");
-  }
+    context.clearRect(0, 0, ctx.width, ctx.height);
+    if (text === null || text === '') {
+        flag = 1;
+        text = '';
+    }
+      
+    while ((text.length > 50 || text.length < 1) && flag !== 1) {
+        flag = 0;
+        alert("Your message is too long. Keep it under 50 characters.");
+        text = prompt("Message: ");
+
+        if (text === null || text === '') {
+            flag = 1;
+            text = '';
+        }
+    }
+
+    if (flag !== 1) {
+        context.font = "48px sans-serif";
+        context.strokeText(text, 30, 70, 994);
+    }
 };
 
 /*
@@ -64,23 +78,37 @@ const drawRectangle = function() {
 
 
     function promptDimensions() {
-        console.log("in func");
         width = prompt("Width:");
         height = prompt("Height:");
         x = prompt("X:");
         y = prompt("Y:");
 
-        if (width == null || height == null || x == null || y == null) {
+        if (width === null || height === null || x === null || y === null) {
           context.clearRect(0, 0, ctx.width, ctx.height);
           flag = 1;
 
-
         }
-        else if (Number.isNaN(width) || Number.isNaN(height) || Number.isNaN(x) || Number.isNaN(y)) {
-          alert("One of your values is not a number.");
+        width = Number(width);
+        while ((Number.isNaN(width) || Number.isNaN(height) || Number.isNaN(x) || Number.isNaN(y)) && flag !== 1) {
+            alert("One of your values is not a number.");
+            width = prompt("Width:");
+            height = prompt("Height:");
+            x = prompt("X:");
+            y = prompt("Y:");
+            if (width === null || height === null || x === null || y === null ) {
+                context.clearRect(0, 0, ctx.width, ctx.height);
+                flag = 1;
+            }
+            else {
+                width = Number(width);
+                height = Number(height);
+                x = Number(x);
+                y = Number(y);
+            }
+            
         }
 
-        else {
+        if (flag !== 1) {
           width = Number(width);
           height = Number(height);
           x = Number(x);
@@ -124,7 +152,7 @@ const drawColoredRectangle = function() {
     let ctx = document.getElementById('student-canvas-3')
     let context = ctx.getContext('2d');
 
-    let color = prompt("Pick a color.");
+    let color = prompt("Color:");
     let flag = 0;
     context.clearRect(0, 0, ctx.width, ctx.height);
 
@@ -138,8 +166,8 @@ const drawColoredRectangle = function() {
         color = color.toLowerCase();
     }
     while (color != "black" && color != "blue" && color != "green" && color != "orange" && color != "purple" && color != "red" && color != "yellow" && flag === 0) {
-        alert("This is an unsupported color.");
-        color = prompt("Pick a color.");
+        alert(color + " is not a supported color.");
+        color = prompt("Color:");
 
         if (color === null) {
             flag = 1;
@@ -181,7 +209,7 @@ const drawTriangle = function() {
         side2 = prompt("Side 2:");
         side3 = prompt("Side 3:");
 
-        if (side1 === null || side2 === null || side3 === null) {
+        if (side1 === null || side2 === null || side3 === null || side1 === '' || side2 === '' || side3 === '') {
                 flag = 1;
                 context.clearRect(0, 0, ctx.width, ctx.height);
             }
@@ -248,12 +276,10 @@ const drawTriangle = function() {
         promptDimensions();
 
     }
-    console.log(ctx.width);
+    
     while (base + 25 >= ctx.width || height + 25 >= ctx.height && flag === 0) {
         alert("Your triangle won't fit on the canvas.");
         promptDimensions();
-        console.log(height + 25);
-        console.log(base + 25);
     }
 };
 
@@ -262,7 +288,88 @@ const drawTriangle = function() {
  */
 
 const drawFace = function() {
-    // write your exercise 4 code here
+    let ctx = document.getElementById('student-canvas-5');
+    let context = ctx.getContext('2d');
+    context.clearRect(0, 0, ctx.width, ctx.height);
+    let radius = prompt("Radius: ");
+    let flag;
+
+    if (radius === null) {
+        flag = 1;
+        context.clearRect(0, 0, ctx.width, ctx.height);
+    }
+    else {
+        radius = Number(radius);
+    }
+    while (Number.isNaN(radius) && flag !== 1) {
+        alert("The radius is not a number.");
+        radius = prompt("Radius: ");
+        
+        flag = 0;
+        if (radius === null) {
+            flag = 1;
+            context.clearRect(0, 0, ctx.width, ctx.height);
+        }
+        else {
+            radius = Number(radius);
+        }
+    }
+    while (radius * 2 > ctx.height && flag !== 1) {
+        alert("Your smiley face won't fit on the canvas.");
+        radius = prompt("Radius: ");
+        
+        flag = 0;
+        if (radius === null) {
+            flag = 1;
+            context.clearRect(0, 0, ctx.width, ctx.height);
+
+        }
+        else {
+            radius = Number(radius);
+        }
+        while (Number.isNaN(radius) && flag !== 1) {
+            alert("The radius is not a number.");
+            radius = prompt("Radius");
+        }
+    }
+    while (radius < 32 && flag !== 1) {
+        alert("Your radius must be at least 32.");
+        radius = prompt("Radius: ");
+        
+        if (radius === null) {
+            flag = 1;
+            context.clearRect(0, 0, ctx.width, ctx.height);
+        }
+        else {
+            radius = Number(radius);
+        }
+        while (radius * 2 > ctx.height && flag !== 1) {
+            alert("Your smiley face won't fit on the canvas.");
+            radius = prompt("Radius: ");
+            radius = Number(radius);
+            flag = 0;
+        }
+        while (Number.isNaN(radius) && flag !== 1) {
+            alert("The radius is not a number.");
+            radius = prompt("Radius");
+            radius = Number(radius);
+        }
+    }
+
+    if (radius * 2 <= ctx.height && radius >= 32 && flag !== 1) {
+        const center_x = 512;
+        const center_y = 256;
+
+        context.beginPath();
+        context.arc(center_x, center_y, radius, 0, Math.PI * 2, true); // Outer circle
+        context.moveTo(center_x + (radius * 0.7), center_y);
+        context.arc(center_x, center_y, radius * 0.7, 0, Math.PI, false);  // Mouth (clockwise)
+        context.moveTo(((center_x - (radius * 0.4)) + radius * 0.15), center_y - (radius * 0.4));
+        context.arc(center_x - (radius * 0.4), center_y - (radius * 0.4), radius * 0.15, 0, Math.PI * 2, true);  // Left eye
+        context.moveTo(center_x + (radius * 0.4) + radius * 0.15, center_y - (radius * 0.4));
+        context.arc(center_x + (radius * 0.4), center_y - (radius * 0.4), radius * 0.15, 0, Math.PI * 2, true);  // Right eye
+        context.stroke();
+    }
 
 };
 
@@ -271,5 +378,104 @@ const drawFace = function() {
  */
 
 const drawPyramid = function() {
-    // write your exercise 5 code here
+    let ctx = document.getElementById('student-canvas-6');
+    let context = ctx.getContext('2d');
+    context.clearRect(0, 0, ctx.width, ctx.height);
+    let side = prompt("Side:");
+    let flag = 0;
+    
+
+    if (side === null) {
+        flag = 1;
+        context.clearRect(0, 0, ctx.width, ctx.height);
+    }
+    else {
+        side = Number(side);
+    }
+    while (Number.isNaN(side) && flag !== 1) {
+        alert("The side is not a number.");
+        side = prompt("Side: ");
+        
+        flag = 0;
+        if (side === null) {
+            flag = 1;
+            context.clearRect(0, 0, ctx.width, ctx.height);
+        }
+        else {
+            side = Number(side);
+        }
+    }
+    while (side * 5 > ctx.height) {
+        alert("Your pyramid won't fit on the canvas.");
+        side = prompt("Side: ");
+        
+        flag = 0;
+        if (side === null) {
+            flag = 1;
+            context.clearRect(0, 0, ctx.width, ctx.height);
+
+        }
+        else {
+            side = Number(side);
+        }
+        while (Number.isNaN(side) && flag !== 1) {
+            alert("The side is not a number.");
+            side = prompt("Side: ");
+        }
+
+    }
+    while (side < 1 && flag !== 1) {
+        alert("Your block size must be at least 1.");
+        side = prompt("Side: ");
+        flag = 0;
+
+        if (side === null) {
+            flag = 1;
+            context.clearRect(0, 0, ctx.width, ctx.height);
+
+        }
+        else {
+            side = Number(side);
+            flag = 0;
+        }
+        while (Number.isNaN(side) && flag !== 1) {
+            alert("The side is not a number.");
+            side = prompt("Side: ");
+        }
+        while (side * 5 > ctx.height) {
+            alert("Your pyramid won't fit on the canvas.");
+            side = prompt("Side: ");
+        
+        }
+
+    }
+    //create the pyramid
+
+    if (flag !== 1 && side * 5 <= ctx.height) {
+        context.strokeRect(ctx.width - (ctx.width - 10), (ctx.height - 10) - side, side, side);
+        for (let i = 1; i < 5; i++) {
+            context.strokeRect(ctx.width - (ctx.width - 10) + (side * i), (ctx.height - 10) - side, side, side);
+        }
+        //i know this is not beautiful code but you gotta do what you gotta do
+        context.strokeRect((ctx.width - (ctx.width - 10)) + (side * 0.5), (ctx.height - 10) - (side * 2) , side, side);
+        context.strokeRect((ctx.width - (ctx.width - 10)) + (side * 1.5), (ctx.height - 10) - (side * 2) , side, side);
+        context.strokeRect(((ctx.width - (ctx.width - 10)) + (side * 1.5 * 2)) - (side * 0.5) , (ctx.height - 10) - (side * 2) , side, side);
+        context.strokeRect(((ctx.width - (ctx.width - 10)) + (side * 1.5 * 3)) - (side) , (ctx.height - 10) - (side * 2) , side, side);
+
+        context.strokeRect((ctx.width - (ctx.width - 10)) + (side * 0.5) + (side * 0.5), (ctx.height - 10) - (side * 3) , side, side);
+        context.strokeRect((ctx.width - (ctx.width - 10)) + (side * 0.5) + (side * 1.5), (ctx.height - 10) - (side * 3) , side, side);
+        context.strokeRect((ctx.width - (ctx.width - 10)) + (side * 0.5) + (side * 2.5), (ctx.height - 10) - (side * 3) , side, side);
+
+        context.strokeRect((ctx.width - (ctx.width - 10)) + (side * 0.5) + side, (ctx.height - 10) - (side * 4) , side, side);
+        context.strokeRect((ctx.width - (ctx.width - 10)) + (side * 0.5) + (side * 2), (ctx.height - 10) - (side * 4) , side, side);
+
+        context.strokeRect((ctx.width - (ctx.width - 10)) + (side * 0.5) + (side * 1.5), (ctx.height - 10) - (side * 5) , side, side);
+    }
+    
+
+
+    
+
+
+
 };
